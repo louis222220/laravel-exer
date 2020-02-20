@@ -11,14 +11,12 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::redirect('/', '/posts');
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::resource('/posts', 'PostController')->only([
-    'create', 'store'
+    'create', 'store', 'index'
 ]);

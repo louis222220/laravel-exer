@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\User;
 use App\Post;
@@ -15,7 +17,8 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        $posts = Post::get();
+        return view('post_index', ['posts' => $posts] );
     }
 
     /**
@@ -40,10 +43,10 @@ class PostController extends Controller
             'post_text' => 'required|min:20'
         ]);
 
-        $tmpUser = User::findOrFail(1);
+        $user = Auth::user();
 
         $newPost = new Post([
-            'user_id' => $tmpUser->id,
+            'user_id' => $user->id,
             'text' => $validatedData['post_text']
         ]);
         $newPost->save();
