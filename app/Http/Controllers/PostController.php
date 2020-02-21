@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\User;
 use App\Post;
@@ -39,9 +40,17 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
+        $validator = Validator::make($request->all(), [
             'post_text' => 'required|min:20'
         ]);
+
+        if ($validator->fails()) {
+            return redirect('posts/create')
+                        ->withErrors($validator)
+                        ->withInput($request->input());
+        }
+        
+        $validatedData = $validator->validate();
 
         $user = Auth::user();
 
