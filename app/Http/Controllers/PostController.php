@@ -52,6 +52,10 @@ class PostController extends Controller
         
         $validatedData = $validator->validate();
 
+        if (! Auth::check()) {
+            return redirect('login');
+        }
+
         $user = Auth::user();
 
         $newPost = new Post([
@@ -59,7 +63,7 @@ class PostController extends Controller
             'text' => $validatedData['post_text']
         ]);
         $newPost->save();
-        return 'created';
+        return redirect('posts');
     }
 
     /**
